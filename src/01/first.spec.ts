@@ -1,6 +1,6 @@
 import { expect, expectTypeOf, test } from 'vitest'
-import { Solution, solution } from '@/01/first'
-import { Example1, example1, input } from '@/01/input'
+import { Solution, solution } from './first'
+import { Example1, example1, input } from './input'
 
 test('given test input, always returns 142', () => {
   type Response = Solution<Example1>

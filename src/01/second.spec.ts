@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest'
-import { example2, input } from '@/01/input'
-import { getDigits, solution, toNumber } from '@/01/second'
+import { example2, input } from './input'
+import { getDigits, solution, toNumber } from './second'
 
 test('given test input, always returns 281', () => {
   const input = example2.split('\n')
