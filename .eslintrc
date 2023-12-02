@@ -12,6 +12,9 @@
   "extends": [
     "@prefecthq"
   ],
+  "ignorePatterns": [
+    "*.config.ts"
+  ],
   "globals": {
     "defineProps": "readonly",
     "defineEmits": "readonly",
