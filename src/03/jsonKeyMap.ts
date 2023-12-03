@@ -13,6 +13,10 @@ export class JsonKeyMap<TKey, TValue> {
     return this.map.get(this.toKey(key))
   }
 
+  public has(key: TKey): boolean {
+    return this.map.has(this.toKey(key))
+  }
+
   public values(): TValue[] {
     return Array.from(this.map.values())
   }
