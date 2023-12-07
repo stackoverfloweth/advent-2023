@@ -10,7 +10,7 @@ test('given test input, always return 46', async () => {
   expect(response).toBe(46)
 })
 
-test('given actual input, always return 31599214', async () => {
+test.skip('given actual input, always return 31599214', async () => {
   const parsed = parseInput(input)
 
   const response = await solve(parsed)

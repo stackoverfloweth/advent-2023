@@ -1,27 +1,18 @@
+import { SeedRange } from './seedRange'
 export class SeedMapRange {
-  public destinationStart: number
-  public sourceStart: number
-  public rangeLength: number
+  public source: SeedRange
+  public destination: SeedRange
 
   public constructor(destinationStart: number, sourceStart: number, rangeLength: number) {
-    this.destinationStart = destinationStart
-    this.sourceStart = sourceStart
-    this.rangeLength = rangeLength
+    this.source = new SeedRange(sourceStart, rangeLength)
+    this.destination = new SeedRange(destinationStart, rangeLength)
   }
 
-  public get sourceEnd(): number {
-    return this.sourceStart + this.rangeLength
+  public intersects(target: SeedRange): boolean {
+    return !(this.source.end < target.start || target.end < this.source.start)
   }
 
-  public get destinationEnd(): number {
-    return this.destinationStart + this.rangeLength
-  }
-
-  public getOffset(sourceValue: number): number {
-    if (sourceValue < this.sourceStart || sourceValue > this.sourceEnd) {
-      throw 'invalid source value for range'
-    }
-
-    return sourceValue - this.sourceStart
+  public get offset(): number {
+    return this.destination.start - this.source.start
   }
 }
