@@ -1,12 +1,11 @@
 import { Almanac } from './input'
-import { SeedMapRange } from './seedMapRange'
 import { SeedRange } from './seedRange'
 
 export function solve(almanac: Almanac): number {
-  // const seedRanges = getSeedRanges(almanac)
-  const seedRanges = [new SeedRange(82, 1)]
+  const seedRanges = getSeedRanges(almanac)
+  // const seedRanges = [new SeedRange(82, 10)]
 
-  return readSeedRanges(almanac, 0, seedRanges)
+  return readSeedRanges(almanac, seedRanges)
 }
 
 export function getSeedRanges(almanac: Almanac): SeedRange[] {
@@ -22,33 +21,36 @@ export function getSeedRanges(almanac: Almanac): SeedRange[] {
   return seeds
 }
 
-export function readSeedRanges(almanac: Almanac, index: number, seedRanges: SeedRange[]): number {
+export function readSeedRanges(almanac: Almanac, seedRanges: SeedRange[]): number {
+  return seedRanges.reduce((min, seedRange) => {
+    const value = readSeedRange(almanac, seedRange)
+
+    return value < min ? value : min
+  }, Infinity)
+}
+
+export function readSeedRange(almanac: Almanac, seedRange: SeedRange): number {
+  return new Array(seedRange.length)
+    .fill(seedRange.start)
+    .map((value, index) => reedSeed(almanac, 0, value + index))
+    .reduce((min, value) => value < min ? value : min, Infinity)
+}
+
+export function reedSeed(almanac: Almanac, index: number, previousValue: number): number {
   const map = almanac.maps[index]
 
   // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
   if (!map) {
-    return seedRanges.reduce((min, seedRange) => seedRange.start < min ? seedRange.start : min, Infinity)
+    return previousValue
   }
 
 
-  const next = seedRanges.map(seedRange => {
-    let mapMin = Infinity
-    for (let i = 0; i < seedRange.end; i++) {
-      const mapsThatIntersect = map.ranges.filter(range => range.intersects(new SeedRange(i, 0)))
+  const mapsThatIntersect = map.ranges.filter(range => range.intersects(new SeedRange(index, 0)))
 
-      if (mapsThatIntersect.length === 0 && i < mapMin) {
-        mapMin = i
-      } else {
-        const mapValue = Math.min(...mapsThatIntersect.map(range => i + range.offset))
-        if (mapValue < mapMin) {
-          mapMin = mapValue
-        }
-      }
-    }
-
-    return mapMin
-  })
+  const nextValue = mapsThatIntersect.length
+    ? Math.min(...mapsThatIntersect.map(map => map.offset + previousValue))
+    : previousValue
 
 
-  return readSeedRanges(almanac, index + 1, next.map(value => new SeedRange(value, 0)))
+  return reedSeed(almanac, index + 1, nextValue)
 }
